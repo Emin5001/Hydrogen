@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/u/emin500/projects/hydrogen/src/main.cpp
+iostream
+-
+fstream
+-
+sstream
+-
+string
+-
+optional
+-
+vector
+-
+

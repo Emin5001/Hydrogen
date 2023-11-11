@@ -1,0 +1,3 @@
+/u/emin500/projects/hydrogen/build/CMakeFiles/rebuild_cache.dir
+/u/emin500/projects/hydrogen/build/CMakeFiles/edit_cache.dir
+/u/emin500/projects/hydrogen/build/CMakeFiles/hydro.dir
