@@ -16,6 +16,40 @@ struct Token {
     std::optional<std::string> value;
 };
 
+std::string tokens_to_asm   (const std::vector<Token>&);
+std::vector<Token> tokenize (const std::string&);
+
+int main(int argc, char** argv) {
+    if (argc != 2) {
+        std::cerr << "Incorrect usage. Correct usage is..." << std::endl;
+        std::cerr << "hydro <input.hy>" << std::endl;
+        return EXIT_FAILURE;
+    }
+    std::string contents;
+    
+    // scope; should close input file by itself.
+    {
+        std::stringstream contents_stream;
+        std::fstream input(argv[1], std::ios::in);
+        contents_stream << input.rdbuf();
+        contents = contents_stream.str();
+    }   
+
+    // tokenized file
+    std::vector<Token> tokens = tokenize(contents);
+
+    // turn tokenized file into asm
+    {
+        std::fstream file("./asm/out.asm", std::ios::out);
+        file << tokens_to_asm(tokens);
+    }
+
+    system("nasm -felf64 ./asm/out.asm");
+    system("ld -o ./asm/out ./asm/out.o");
+
+    return 0;
+}
+
 std::vector<Token> tokenize(const std::string& str) {
     std::vector<Token> tokens;
     std::string buffer;
@@ -79,35 +113,4 @@ std::string tokens_to_asm(const std::vector<Token>& tokens) {
     }
 
     return output.str();
-}
-
-int main(int argc, char** argv) {
-    if (argc != 2) {
-        std::cerr << "Incorrect usage. Correct usage is..." << std::endl;
-        std::cerr << "hydro <input.hy>" << std::endl;
-        return EXIT_FAILURE;
-    }
-    std::string contents;
-    
-    // scope; should close input file by itself.
-    {
-        std::stringstream contents_stream;
-        std::fstream input(argv[1], std::ios::in);
-        contents_stream << input.rdbuf();
-        contents = contents_stream.str();
-    }   
-
-    // tokenized file
-    std::vector<Token> tokens = tokenize(contents);
-
-    // turn tokenized file into asm
-    {
-        std::fstream file("./asm/out.asm", std::ios::out);
-        file << tokens_to_asm(tokens);
-    }
-
-    system("nasm -felf64 ./asm/out.asm");
-    system("ld -o ./asm/out ./asm/out.o");
-
-    return EXIT_SUCCESS;
 }
